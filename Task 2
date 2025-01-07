@@ -1,0 +1,105 @@
+//This is the program of Basic File Manager..
+
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+void createFile(const string& filename) {
+    ofstream file(filename);
+    if (file) {
+        cout << "File '" << filename << "' created successfully.\n";
+    } else {
+        cout << "Error creating file '" << filename << "'.\n";
+    }
+    file.close();
+}
+
+void writeFile(const string& filename) {
+    ofstream file(filename, ios::app); // Open in append mode
+    if (file) {
+        cout << "Enter content to write to the file (type 'exit' to stop):\n";
+        string line;
+        while (true) {
+            getline(cin, line);
+            if (line == "exit") break;
+            file << line << "\n";
+        }
+        cout << "Content written to '" << filename << "'.\n";
+    } else {
+        cout << "Error opening file '" << filename << "' for writing.\n";
+    }
+    file.close();
+}
+
+void readFile(const string& filename) {
+    ifstream file(filename);
+    if (file) {
+        cout << "Content of '" << filename << "':\n";
+        string line;
+        while (getline(file, line)) {
+            cout << line << "\n";
+        }
+    } else {
+        cout << "Error opening file '" << filename << "' for reading.\n";
+    }
+    file.close();
+}
+
+void deleteFile(const string& filename) {
+    if (remove(filename.c_str()) == 0) {
+        cout << "File '" << filename << "' deleted successfully.\n";
+    } else {
+        cout << "Error deleting file '" << filename << "'. File may not exist.\n";
+    }
+}
+
+int main() {
+    int choice;
+    string filename;
+
+    while (true) {
+        cout << "\nFile Manager Menu:\n";
+        cout << "1. Create File\n";
+        cout << "2. Write to File\n";
+        cout << "3. Read File\n";
+        cout << "4. Delete File\n";
+        cout << "5. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+        cin.ignore(); // To handle the newline character after the choice input
+
+        switch (choice) {
+            case 1:
+                cout << "Enter the filename to create: ";
+                getline(cin, filename);
+                createFile(filename);
+                break;
+
+            case 2:
+                cout << "Enter the filename to write to: ";
+                getline(cin, filename);
+                writeFile(filename);
+                break;
+
+            case 3:
+                cout << "Enter the filename to read: ";
+                getline(cin, filename);
+                readFile(filename);
+                break;
+
+            case 4:
+                cout << "Enter the filename to delete: ";
+                getline(cin, filename);
+                deleteFile(filename);
+                break;
+
+            case 5:
+                cout << "Exiting File Manager. Goodbye!\n";
+                return 0;
+
+            default:
+                cout << "Invalid choice. Please try again.\n";
+        }
+    }
+}
